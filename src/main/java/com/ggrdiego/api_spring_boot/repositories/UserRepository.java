@@ -1,5 +1,9 @@
 package com.ggrdiego.api_spring_boot.repositories;
 
-public class UserRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
 
+import com.ggrdiego.api_spring_boot.entities.User;
+
+public interface UserRepository extends JpaRepository<User, Long> {
+		
 }
