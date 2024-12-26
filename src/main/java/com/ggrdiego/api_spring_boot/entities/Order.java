@@ -5,6 +5,8 @@ import java.time.Instant;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ggrdiego.api_spring_boot.enuns.OrderStatus;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,30 +16,36 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
-
-
 @Entity
-@Table(name="tb_order")
+@Table(name = "tb_order")
 public class Order implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-	
-	@JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
-	private Instant  moment;
 
+	private Integer orderStatus;
+	
+	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
+	private Instant moment;
+
+	@JsonIgnore //Annotation for Json were ignored in order
 	@ManyToOne
-	@JoinColumn(name="client_id")
+	@JoinColumn(name = "client_id")
 	private User client;
 
-	public Order(Long id, Instant moment, User client) {
+	public Order() {
+
+	}
+
+	public Order(Long id, Instant moment, OrderStatus orderStatusEnum, User client) {
 		super();
 		this.id = id;
 		this.moment = moment;
+		setOrderStatus(orderStatusEnum);
 		this.client = client;
 	}
 
@@ -64,6 +72,15 @@ public class Order implements Serializable {
 	public void setClient(User client) {
 		this.client = client;
 	}
+	
+	
+	public OrderStatus getOrderStatus() {
+		return OrderStatus.valueOfCodeOrder(orderStatus);
+	}
+
+	public void setOrderStatus(OrderStatus orderStatusEnum) {
+		if(orderStatusEnum != null) this.orderStatus = orderStatusEnum.getCode();
+	}
 
 	@Override
 	public int hashCode() {
@@ -82,8 +99,5 @@ public class Order implements Serializable {
 		return Objects.equals(client, other.client) && Objects.equals(id, other.id)
 				&& Objects.equals(moment, other.moment);
 	}
-	
-	
-	
 
 }
