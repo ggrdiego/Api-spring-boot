@@ -9,14 +9,15 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 
 
 
 @Entity
-@Table(name="tab_category")
-public class Category implements Serializable{
+@Table(name="tab_product")
+public class Product implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -26,16 +27,26 @@ public class Category implements Serializable{
 	
 	private String name;
 	
-	private Set<Product> products = new HashSet<>();
+	private String description;
 	
+	private Double price;
 	
-	public Category() {	
+	private String imgUrl;
+	
+	@OneToMany
+	private Set<Category> categories = new HashSet<>();
+	
+	public Product() {
+		
 	}
-	
-	public Category(Long id, String name) {
+
+	public Product(Long id, String name, String description, Double price, String imgUrl) {
 		super();
 		this.id = id;
 		this.name = name;
+		this.description = description;
+		this.price = price;
+		this.imgUrl = imgUrl;
 	}
 
 	public Long getId() {
@@ -53,12 +64,35 @@ public class Category implements Serializable{
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	public Set<Product> getProducts() {
-		return products;
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public Double getPrice() {
+		return price;
+	}
+
+	public void setPrice(Double price) {
+		this.price = price;
+	}
+
+	public String getImgUrl() {
+		return imgUrl;
+	}
+
+	public void setImgUrl(String imgUrl) {
+		this.imgUrl = imgUrl;
 	}
 
 
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
 
 	@Override
 	public int hashCode() {
@@ -73,12 +107,17 @@ public class Category implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Category other = (Category) obj;
+		Product other = (Product) obj;
 		return Objects.equals(id, other.id);
 	}
-
-
 	
+	
+	
+	
+	
+	
+	
+
 	
 	
 	
