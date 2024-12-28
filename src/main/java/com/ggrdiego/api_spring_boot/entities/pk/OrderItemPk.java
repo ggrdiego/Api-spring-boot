@@ -3,12 +3,13 @@ package com.ggrdiego.api_spring_boot.entities.pk;
 import java.io.Serializable;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ggrdiego.api_spring_boot.entities.Order;
 import com.ggrdiego.api_spring_boot.entities.Product;
 
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 
 @Embeddable
 public class OrderItemPk implements Serializable {
@@ -16,13 +17,15 @@ public class OrderItemPk implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
-	@ManyToMany
+	@ManyToOne
 	@JoinColumn(name = "order_id")
+	private Order order;
+	
+	@ManyToOne
+	@JoinColumn(name = "product_id")
 	private Product product;
 	
-	@ManyToMany
-	@JoinColumn(name = "product_id")
-	private Order order;
+
 
 	public Product getProduct() {
 		return product;
@@ -31,6 +34,7 @@ public class OrderItemPk implements Serializable {
 	public void setProduct(Product product) {
 		this.product = product;
 	}
+
 
 	public Order getOrder() {
 		return order;

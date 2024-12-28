@@ -1,12 +1,24 @@
 package com.ggrdiego.api_spring_boot.entities;
 
+import java.io.Serializable;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ggrdiego.api_spring_boot.entities.pk.OrderItemPk;
 
-public class OrderItem {
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+
+
+@Entity
+@Table(name ="tb_order_item")
+public class OrderItem implements Serializable{
 	
-	private OrderItemPk id;
+	private static final long serialVersionUID = 1L;
+
+	@EmbeddedId
+	private OrderItemPk id = new OrderItemPk();
 	
 	private Integer quantity;
 	private Double price;
@@ -59,7 +71,7 @@ public class OrderItem {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(orderItemPk);
+		return Objects.hash(id);
 	}
 
 	@Override
@@ -71,7 +83,7 @@ public class OrderItem {
 		if (getClass() != obj.getClass())
 			return false;
 		OrderItem other = (OrderItem) obj;
-		return Objects.equals(orderItemPk, other.orderItemPk);
+		return Objects.equals(id, other.id);
 	}
 	
 	
