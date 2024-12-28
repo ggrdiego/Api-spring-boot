@@ -3,7 +3,7 @@ package com.ggrdiego.api_spring_boot.entities.pk;
 import java.io.Serializable;
 import java.util.Objects;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import com.ggrdiego.api_spring_boot.entities.Order;
 import com.ggrdiego.api_spring_boot.entities.Product;
 

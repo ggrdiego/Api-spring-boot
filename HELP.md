@@ -33,3 +33,8 @@ sudo lsof -i :8080
 
 ### To kill the process
 sudo kill -9 <PID> 
+
+
+### To start .jar
+java -jar api.jar
+
