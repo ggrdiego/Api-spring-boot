@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+
 import com.ggrdiego.api_spring_boot.enuns.OrderStatus;
 
 import jakarta.persistence.CascadeType;
@@ -29,11 +29,10 @@ public class Order implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	private Instant moment;
 
 	private Integer orderStatus;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
-	private Instant moment;
 
 	@ManyToOne
 	@JoinColumn(name = "client_id")
@@ -53,8 +52,8 @@ public class Order implements Serializable {
 		super();
 		this.id = id;
 		this.moment = moment;
-		setOrderStatus(orderStatusEnum);
 		this.client = client;
+		setOrderStatus(orderStatusEnum);
 	}
 
 	public Long getId() {
@@ -89,6 +88,10 @@ public class Order implements Serializable {
 		if (orderStatusEnum != null)
 			this.orderStatus = orderStatusEnum.getCode();
 	}
+	
+	public Set<OrderItem> getItems() {
+		return items;
+	}
 
 	public Payment getPayment() {
 		return payment;
@@ -96,6 +99,17 @@ public class Order implements Serializable {
 
 	public void setPayment(Payment payment) {
 		this.payment = payment;
+	}
+
+	public Double getTotalOrder() {
+		Double sum = 0.0;
+
+		for (OrderItem orderItems : items) {
+			sum += orderItems.getSubTotal();
+		}
+
+		return sum;
+
 	}
 
 	@Override
