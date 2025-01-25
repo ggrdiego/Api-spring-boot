@@ -13,6 +13,8 @@ import com.ggrdiego.api_spring_boot.repositories.UserRepository;
 import com.ggrdiego.api_spring_boot.services.exceptions.DatabaseException;
 import com.ggrdiego.api_spring_boot.services.exceptions.ResourceNotFoundException;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @Service
 public class UserService {
 
@@ -46,10 +48,14 @@ public class UserService {
 	}
 
 	public User update(long id, User obj) {
-		User entityMonitored = repository.getReferenceById(id);
+		try {User entityMonitored = repository.getReferenceById(id);
 		updateData(entityMonitored, obj);
 		return repository.save(entityMonitored);
-
+			
+		} catch (EntityNotFoundException e ) {
+			throw new ResourceNotFoundException(id);
+		}
+		
 	}
 
 	private void updateData(User entityMonitored, User obj) {
