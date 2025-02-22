@@ -2,5 +2,6 @@
 
 web-services.pdf
 
-/src/main/resources/application-dev.properties
+target/src/main/resources/
 
+application-dev.properties
