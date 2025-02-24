@@ -61,15 +61,17 @@ public class UserResource {
 	
 	@PutMapping(value = "/{id}")
 	public ResponseEntity<User> update(@PathVariable Long id, @RequestBody User obj){
+		
 		obj = service.update(id, obj);
 		return ResponseEntity.ok().body(obj);
 		
 	}
 	
 	@PatchMapping(value = "/{id}")
-	public ResponseEntity<Map<String, Object>> updatePatch(@PathVariable Long id, @RequestBody Map<String, Object> fields){
+	public ResponseEntity<User> updatePatch(@PathVariable Long id, @RequestBody Map<String, Object> fields){
 		
-		return ResponseEntity.ok(fields);
+		User userChanged = service.updatePatch(id, fields);
+		return ResponseEntity.ok(userChanged);
 		
 	}
 	

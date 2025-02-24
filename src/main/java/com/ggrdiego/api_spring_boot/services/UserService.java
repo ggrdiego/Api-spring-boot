@@ -1,12 +1,15 @@
 package com.ggrdiego.api_spring_boot.services;
 
+import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ReflectionUtils;
 
 import com.ggrdiego.api_spring_boot.entities.User;
 import com.ggrdiego.api_spring_boot.repositories.UserRepository;
@@ -48,14 +51,15 @@ public class UserService {
 	}
 
 	public User update(long id, User obj) {
-		try {User entityMonitored = repository.getReferenceById(id);
-		updateData(entityMonitored, obj);
-		return repository.save(entityMonitored);
-			
-		} catch (EntityNotFoundException e ) {
+		try {
+			User entityMonitored = repository.getReferenceById(id);
+			updateData(entityMonitored, obj);
+			return repository.save(entityMonitored);
+
+		} catch (EntityNotFoundException e) {
 			throw new ResourceNotFoundException(id);
 		}
-		
+
 	}
 
 	private void updateData(User entityMonitored, User obj) {
@@ -64,9 +68,31 @@ public class UserService {
 		entityMonitored.setPhone(obj.getPhone());
 
 	}
-	
-	
-	
-	
+
+	public User updatePatch(Long id, Map<String, Object> fields) {
+//		Optional<User> userOptional = repository.getReferenceById(id);
+//		
+//		fields.forEach((key, value) -> {
+//			if (key.equals("name")) entity.setName(key);
+//			
+//		});
+
+		try {
+			User entityMonitored = repository.getReferenceById(id);
+			fields.forEach((key, value) -> {
+				Field campo = ReflectionUtils.findField(User.class, key);
+				if (campo != null) {
+					campo.setAccessible(true);
+					ReflectionUtils.setField(campo, entityMonitored, value);
+				}
+			});
+
+			return repository.save(entityMonitored);
+
+		} catch (EntityNotFoundException e) {
+			throw new ResourceNotFoundException(id);
+		}
+
+	}
 
 }
