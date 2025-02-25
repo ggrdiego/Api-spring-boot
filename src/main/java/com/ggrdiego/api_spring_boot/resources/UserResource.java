@@ -70,8 +70,8 @@ public class UserResource {
 	@PatchMapping(value = "/{id}")
 	public ResponseEntity<User> updatePatch(@PathVariable Long id, @RequestBody Map<String, Object> fields){
 		
-		User userChanged = service.updatePatch(id, fields);
-		return ResponseEntity.ok(userChanged);
+		User user = service.updatePatch(id, fields);
+		return ResponseEntity.ok(user);
 		
 	}
 	

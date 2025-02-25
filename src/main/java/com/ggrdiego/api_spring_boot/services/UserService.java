@@ -70,29 +70,21 @@ public class UserService {
 	}
 
 	public User updatePatch(Long id, Map<String, Object> fields) {
-//		Optional<User> userOptional = repository.getReferenceById(id);
-//		
-//		fields.forEach((key, value) -> {
-//			if (key.equals("name")) entity.setName(key);
-//			
-//		});
 
-		try {
-			User entityMonitored = repository.getReferenceById(id);
+		User user = repository.findById(id)
+				.orElseThrow();
+		
 			fields.forEach((key, value) -> {
 				Field campo = ReflectionUtils.findField(User.class, key);
 				if (campo != null) {
 					campo.setAccessible(true);
-					ReflectionUtils.setField(campo, entityMonitored, value);
+					ReflectionUtils.setField(campo, user, value);
 				}
 			});
 
-			return repository.save(entityMonitored);
+			return repository.save(user);
 
-		} catch (EntityNotFoundException e) {
-			throw new ResourceNotFoundException(id);
-		}
-
+	
 	}
 
 }
